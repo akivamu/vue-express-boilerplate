@@ -5,17 +5,21 @@
   "author": "Akivamu <akivamu@gmail.com>",
   "private": true,
   "scripts": {
-    "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
-    "start": "npm run dev",
-    "unit": "jest --config test/unit/jest.conf.js --coverage",
-    "e2e": "node test/e2e/runner.js",
-    "test": "npm run unit && npm run e2e",
-    "lint": "eslint --ext .js,.vue src test/unit test/e2e/specs",
-    "build": "node build/build.js"
+    "web:dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
+    "web:unit": "jest --config test/unit/jest.conf.js --coverage",
+    "web:e2e": "node test/e2e/runner.js",
+    "web:test": "npm run web:unit && npm run web:e2e",
+    "web:lint": "eslint --ext .js,.vue src test/unit test/e2e/specs",
+    "web:build": "node build/build.js",
+    "http:dev": "node http/index.js",
+    "http:prod": "export NODE_ENV=production && node http/index.js",
+    "start": "npm install && npm run web:build && npm run http:prod"
   },
   "dependencies": {
+    "express": "^4.16.3",
     "vue": "^2.5.2",
-    "vue-router": "^3.0.1"
+    "vue-router": "^3.0.1",
+    "webpack-dev-middleware": "^2.0.6"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",
