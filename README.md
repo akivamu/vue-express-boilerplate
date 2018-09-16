@@ -38,3 +38,19 @@ npm run web:e2e
 # run all tests
 npm run web:test
 ```
+
+## Features adding flow
+
+### 1. Init by vue-cli
+
+`vue init webpack ...`
+
+### 2. Add ExpressJS
+
+ExpressJS is used to host VueJS, source code in `/http`
+
+### 3. Add VueX
+
+- VueX demo page components added: `/src/components/vuex`
+- VueX store contains state `visitorName`, which is changed in component `VisitorNameInput`
+- `vue-test-utils` added to mock VueX
