@@ -54,3 +54,8 @@ ExpressJS is used to host VueJS, source code in `/http`
 - VueX demo page components added: `/src/components/vuex`
 - VueX store contains state `visitorName`, which is changed in component `VisitorNameInput`
 - `vue-test-utils` added to mock VueX
+
+### 4. Add auth login
+
+- `http` module provides rest endpoint to login `/auth/login`
+- `web` module use `axios` to post login
