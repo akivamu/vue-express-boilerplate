@@ -2,6 +2,12 @@
   <div class="home">
     <img src="../assets/logo.png">
     <h1>{{ msg }}</h1>
+    <h2>Demo</h2>
+    <ul>
+      <li>
+        <router-link to="/vuex">VueX demo</router-link>
+      </li>
+    </ul>
     <h2>Essential Links</h2>
     <ul>
       <li>
