@@ -7,6 +7,9 @@
       <li>
         <router-link to="/vuex">VueX demo</router-link>
       </li>
+      <li>
+        <router-link to="/member">Member page demo</router-link>
+      </li>
     </ul>
     <h2>Essential Links</h2>
     <ul>
