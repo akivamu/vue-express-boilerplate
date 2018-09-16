@@ -6,7 +6,7 @@ module.exports = {
     // automatically uses dev Server port from /config.index.js
     // default: http://localhost:8080
     // see nightwatch.conf.js
-    const url = browser.globals.devServerURL + '/#/vuex'
+    const url = browser.globals.devServerURL + '/vuex'
 
     browser
       .url(url)
