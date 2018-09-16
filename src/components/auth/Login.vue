@@ -39,7 +39,7 @@ export default {
       api.auth.login(this.username, this.password).then(() => {
         this.$router.push('/member')
       }).catch((error) => {
-        this.error = error
+        this.error = error.message
       })
     }
   }

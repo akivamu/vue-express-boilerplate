@@ -6,6 +6,7 @@ const path = require('path')
 
 module.exports = {
   dev: {
+    apiUrl: 'http://localhost:8080',
 
     // Paths
     assetsSubDirectory: 'static',
@@ -44,6 +45,8 @@ module.exports = {
   },
 
   build: {
+    apiUrl: 'http://localhost:8080',
+
     // Template for index.html
     index: path.resolve(__dirname, '../dist/index.html'),
 
