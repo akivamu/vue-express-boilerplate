@@ -15,6 +15,10 @@ app.use(bodyParser.urlencoded({extended: true}))
 // Rest
 app.use('/auth', require('./api/auth'))
 
+// Web: handle refresh page action
+const history = require('connect-history-api-fallback')
+app.use(history())
+
 // Web
 const webpackUtils = require('./webpack-utils')
 switch (config.env) {
