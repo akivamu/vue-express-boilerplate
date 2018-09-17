@@ -1,7 +1,8 @@
 <template>
   <div class="home">
-    <h1>You are logged in</h1>
+    <h1>You are logged in.</h1>
     <button class="btn btn-primary" v-on:click="logout">Logout</button>
+    <p>Currently has {{accounts.length}} accounts in the system</p>
   </div>
 </template>
 
@@ -9,6 +10,16 @@
 import api from '../../services/api'
 
 export default {
+  data () {
+    return {
+      accounts: []
+    }
+  },
+  mounted: function () {
+    api.account.getAll().then((accounts) => {
+      this.accounts = accounts
+    })
+  },
   methods: {
     logout: function () {
       api.auth.logout().then(() => {

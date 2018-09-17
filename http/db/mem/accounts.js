@@ -18,3 +18,7 @@ module.exports.findByUsername = (username) => {
   }
   return Promise.resolve(null)
 }
+
+module.exports.findAll = () => {
+  return Promise.resolve(accounts)
+}

@@ -15,6 +15,7 @@ require('./passport-init').attachToExpress(app)
 
 // Rest
 app.use('/auth', require('./api/auth'))
+app.use('/account', require('./api/account'))
 
 // Web: handle refresh page action
 const history = require('connect-history-api-fallback')
