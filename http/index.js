@@ -11,7 +11,7 @@ const bodyParser = require('body-parser')
 const app = express()
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}))
-require('./passport-init').attachToExpress(app)
+require('./passport-utils').attachToExpress(app)
 
 // Rest
 app.use('/auth', require('./api/auth'))

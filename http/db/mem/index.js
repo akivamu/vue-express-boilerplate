@@ -1,5 +1,5 @@
 const accounts = require('./accounts')
-const accessTokens = require('./accessTokens')
+const accessTokens = require('./access-tokens')
 
 module.exports = {
   accounts,
