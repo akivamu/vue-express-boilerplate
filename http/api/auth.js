@@ -1,24 +1,14 @@
 'use strict'
 
 const router = require('express').Router()
-const db = require('../db')
+const passport = require('passport')
 
-router.post('/login', function (req, res) {
-  db.accounts.findByUsernameAndPassword(req.body.username, req.body.password)
-    .then((account) => {
-      res.json({
-        status: 'success',
-        data: {
-          token: 'test-token'
-        }
-      })
-    })
-    .catch((error) => {
-      res.status(401).json({
-        status: 'fail',
-        message: error.message
-      })
-    })
+router.post('/login', passport.authenticate('local', {session: false}), function (req, res) {
+  res.json({
+    data: {
+      token: 'test-token'
+    }
+  })
 })
 
 module.exports = router

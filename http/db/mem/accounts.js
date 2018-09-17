@@ -1,12 +1,20 @@
 // TODO: this is dummy db, rewrite full db
-module.exports.findByUsernameAndPassword = (username, password) => {
-  if (username === 'test' && password === 'test') {
-    return Promise.resolve({
-      id: 1,
-      username: 'test',
-      password: 'test'
-    })
-  } else {
-    return Promise.reject(new Error('Invalid username or password'))
+const accounts = [
+  {
+    id: 1,
+    username: 'admin',
+    password: 'admin'
+  },
+  {
+    id: 2,
+    username: 'user',
+    password: 'user'
   }
+]
+
+module.exports.findByUsername = (username) => {
+  for (let i = 0; i < accounts.length; i++) {
+    if (accounts[i].username === username) return Promise.resolve(accounts[i])
+  }
+  return Promise.resolve(null)
 }
