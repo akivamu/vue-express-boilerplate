@@ -3,10 +3,11 @@
 const router = require('express').Router()
 const passport = require('passport')
 const db = require('../db')
+const tokenUtils = require('../token-utils')
 
 function generateToken (userId) {
   const token = {
-    access_token: '123', // TODO: generate
+    access_token: tokenUtils.generateToken({id: userId}),
     token_type: 'bearer',
     user_id: userId
   }

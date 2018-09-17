@@ -11,11 +11,13 @@ const bodyParser = require('body-parser')
 const app = express()
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}))
-require('./passport-utils').attachToExpress(app)
+
+const passportUtils = require('./passport-utils')
+passportUtils.attachToExpress(app)
 
 // Rest
 app.use('/auth', require('./api/auth'))
-app.use('/account', require('./api/account'))
+app.use('/account', passportUtils.BearerAuthenticated, require('./api/account'))
 
 // Web: handle refresh page action
 const history = require('connect-history-api-fallback')

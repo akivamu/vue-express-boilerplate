@@ -4,5 +4,9 @@ module.exports = {
   port: process.env.PORT || 8080,
   database: {
     name: 'mem'
+  },
+  jwt: {
+    secret: 'jwt-secret',
+    expiresIn: '1h'
   }
 }

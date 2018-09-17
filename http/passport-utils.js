@@ -19,13 +19,12 @@ passport.use(new LocalStrategy(
 
 // Bearer
 const BearerStrategy = require('passport-http-bearer').Strategy
+const tokenUtils = require('./token-utils')
 passport.use(new BearerStrategy(
   (accessToken, done) => {
-    db.accessTokens.findByToken(accessToken)
-      .then(token => {
-        // TODO: parse token and return done(null, user)
-
-        return done(null, token || false)
+    tokenUtils.verifyToken(accessToken)
+      .then(tokenPayload => {
+        return done(null, tokenPayload)
       })
       .catch(error => {
         return done(error)
@@ -33,8 +32,28 @@ passport.use(new BearerStrategy(
   }
 ))
 
+function bearerAuthenticated (req, res, next) {
+  passport.authenticate('bearer', function (err, user, info) {
+    if (err) {
+      res.status(401).json({error: err})
+    } else if (!user) {
+      res.status(401).json({
+        error: {
+          message: 'Unauthorized (general)'
+        }
+      })
+    } else {
+      req.logIn(user, {session: false}, function (err) {
+        if (err) return next(err)
+        return next()
+      })
+    }
+  })(req, res, next)
+}
+
 module.exports = {
   attachToExpress: function (expressApp) {
     expressApp.use(passport.initialize())
-  }
+  },
+  BearerAuthenticated: bearerAuthenticated
 }
