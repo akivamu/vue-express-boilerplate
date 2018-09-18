@@ -47,11 +47,28 @@ module.exports = {
     return new Promise((resolve, reject) => {
       jwt.verify(accessToken, config.secret, (err, decoded) => {
         if (err) {
-          return reject(err)
+          return resolve({
+            error: {
+              name: err.name === 'TokenExpiredError' ? 'AccessTokenExpired' : err.name,
+              message: err.message
+            }
+          })
         } else {
-          // TODO: check if revoked token
-
-          return resolve(decoded)
+          // Check if revoked token
+          db.tokens.findRevokedAccessToken(accessToken)
+            .then(token => {
+              if (token) {
+                resolve({
+                  error: {
+                    name: 'AccessTokenRevoked',
+                    message: 'Access token is revoked'
+                  }
+                })
+              } else resolve({payload: decoded})
+            })
+            .catch(error => {
+              reject(error)
+            })
         }
       })
     })
@@ -61,12 +78,24 @@ module.exports = {
       // JWT verify first
       jwt.verify(refreshToken, config.secret, function (err, decoded) {
         if (err) {
-          reject(err)
+          return resolve({
+            error: {
+              name: err.name === 'TokenExpiredError' ? 'RefreshTokenExpired' : err.name,
+              message: err.message
+            }
+          })
         } else {
           // Check exist in database
           db.tokens.findRefreshToken(refreshToken)
             .then(token => {
-              if (!token) return reject(new Error('Non exist refresh token'))
+              if (!token) {
+                return resolve({
+                  error: {
+                    name: 'NonExistRefreshToken',
+                    message: 'Non exist refresh token'
+                  }
+                })
+              }
 
               // Generate new access token
               const payload = buildTokenPayload(decoded)
@@ -77,8 +106,24 @@ module.exports = {
                 expires_in: accessToken.expiresIn
               })
             })
+            .catch(error => {
+              reject(error)
+            })
         }
       })
+    })
+  },
+  revokeTokens: function (accessToken, refreshToken) {
+    return new Promise(function (resolve, reject) {
+      jwt.verify(accessToken, config.secret, function (err, decoded) {
+        if (!err) db.tokens.saveRevokedAccessTokens(accessToken)
+      })
+
+      jwt.verify(refreshToken, config.secret, function (err, decoded) {
+        if (!err) db.tokens.deleteRefreshToken(refreshToken)
+      })
+
+      resolve()
     })
   }
 }

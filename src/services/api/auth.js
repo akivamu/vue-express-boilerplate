@@ -1,5 +1,6 @@
 import store from '../../store'
 import axios from 'axios'
+import router from '../../router'
 
 function setupAxiosAuth () {
   const authInfo = store.state.auth.authInfo
@@ -19,8 +20,8 @@ axios.interceptors.response.use(function (response) {
 
   // Handle all 401 error
   if (error.response.status === 401 && !originalRequest._retry) {
-    // Token expired
-    if (error.response.data.error.name === 'TokenExpiredError') {
+    if (error.response.data.error && error.response.data.error.name === 'AccessTokenExpired') {
+      // AccessTokenExpired: refresh token
       originalRequest._retry = true
 
       return axios.post('/auth/refresh-token', {token: store.state.auth.authInfo.refresh_token})
@@ -33,6 +34,14 @@ axios.interceptors.response.use(function (response) {
           originalRequest.headers['Authorization'] = axios.defaults.headers.common['Authorization']
           return axios(originalRequest)
         })
+        .catch(err => {
+          // Refresh token failed. Logout
+          AuthApi.logout(true)
+          throw err
+        })
+    } else {
+      // Other 401: logout to login page
+      AuthApi.logout(true)
     }
   }
 
@@ -42,7 +51,7 @@ axios.interceptors.response.use(function (response) {
 // Load authInfo from store
 setupAxiosAuth()
 
-export default {
+const AuthApi = {
   login: function (username, password) {
     return axios.post('/auth/login', {username: username, password: password})
       .then(res => {
@@ -57,9 +66,17 @@ export default {
         }
       })
   },
-  logout: function () {
+  logout: function (toLogInPage) {
+    if (store.state.auth.authInfo) {
+      axios.post('/auth/logout', store.state.auth.authInfo)
+    }
+
     store.commit('auth/setAuthInfo', null)
     setupAxiosAuth()
+
+    router.push(toLogInPage ? '/login' : '/')
     return Promise.resolve()
   }
 }
+
+export default AuthApi

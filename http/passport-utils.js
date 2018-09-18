@@ -23,8 +23,12 @@ const tokenUtils = require('./token-utils')
 passport.use(new BearerStrategy(
   (accessToken, done) => {
     tokenUtils.verifyAccessToken(accessToken)
-      .then(tokenPayload => {
-        return done(null, tokenPayload)
+      .then(data => {
+        if (data.error) {
+          done(data)
+        } else {
+          done(null, data.payload)
+        }
       })
       .catch(error => {
         return done(error)
@@ -35,7 +39,7 @@ passport.use(new BearerStrategy(
 function bearerAuthenticated (req, res, next) {
   passport.authenticate('bearer', function (err, user, info) {
     if (err) {
-      res.status(401).json({error: err})
+      res.status(401).json(err)
     } else if (!user) {
       res.status(401).json({
         error: {
