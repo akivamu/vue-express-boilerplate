@@ -15,6 +15,12 @@ const mutations = {
   setAuthInfo (state, info) {
     state.authInfo = info
     localStorage.setItem('authInfo', JSON.stringify(info))
+  },
+  updateNewAccessToken (state, newAccessToken) {
+    state.authInfo.access_token = newAccessToken.access_token
+    state.authInfo.token_type = newAccessToken.token_type
+    state.authInfo.expires_in = newAccessToken.expires_in
+    localStorage.setItem('authInfo', JSON.stringify(state.authInfo))
   }
 }
 

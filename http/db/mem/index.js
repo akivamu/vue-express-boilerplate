@@ -1,9 +1,9 @@
 const accounts = require('./accounts')
-const accessTokens = require('./access-tokens')
+const tokens = require('./tokens')
 
 module.exports = {
   accounts,
-  accessTokens,
+  tokens,
   init: function () {
     // DO NOTHING
   }

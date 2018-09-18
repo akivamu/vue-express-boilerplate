@@ -7,6 +7,7 @@ module.exports = {
   },
   jwt: {
     secret: 'jwt-secret',
-    expiresIn: '1h'
+    accessTokenExpiresIn: '1h',
+    refreshTokenExpiresIn: '1d'
   }
 }

@@ -22,7 +22,7 @@ const BearerStrategy = require('passport-http-bearer').Strategy
 const tokenUtils = require('./token-utils')
 passport.use(new BearerStrategy(
   (accessToken, done) => {
-    tokenUtils.verifyToken(accessToken)
+    tokenUtils.verifyAccessToken(accessToken)
       .then(tokenPayload => {
         return done(null, tokenPayload)
       })

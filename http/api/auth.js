@@ -2,27 +2,38 @@
 
 const router = require('express').Router()
 const passport = require('passport')
-const db = require('../db')
 const tokenUtils = require('../token-utils')
 
-function generateToken (userId) {
-  const token = {
-    access_token: tokenUtils.generateToken({id: userId}),
-    token_type: 'bearer',
-    user_id: userId
-  }
-
-  db.accessTokens.save(token)
-
-  return token
-}
-
 router.post('/login', passport.authenticate('local', {session: false}), function (req, res) {
-  const token = generateToken(req.user.id)
+  const tokenData = tokenUtils.generateTokens(req.user.id)
 
   res.json({
-    data: token
+    data: tokenData
   })
+})
+
+router.post('/refresh-token', function (req, res) {
+  if (!req.body.token) {
+    res.state(400).json({
+      error: {
+        message: 'Missing refresh token'
+      }
+    })
+  } else {
+    tokenUtils.refreshToken(req.body.token)
+      .then(accessToken => {
+        res.json({
+          data: accessToken
+        })
+      })
+      .catch(error => {
+        res.status(401).json({
+          error: {
+            message: error.message
+          }
+        })
+      })
+  }
 })
 
 module.exports = router
