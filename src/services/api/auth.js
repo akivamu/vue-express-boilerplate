@@ -20,7 +20,11 @@ export default {
         setAuthInfo(res.data.data)
       })
       .catch(error => {
-        throw error.response.data
+        if (error.response && error.response.status === 401) {
+          throw new Error('Invalid username or password')
+        } else {
+          throw new Error('Error occurs, please try again later')
+        }
       })
   },
   logout: function () {
