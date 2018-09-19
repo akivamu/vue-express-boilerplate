@@ -5,11 +5,11 @@
   "author": "Akivamu <akivamu@gmail.com>",
   "private": true,
   "scripts": {
+    "lint": "eslint --ext .js,.vue src http test/unit test/e2e/specs",
     "web:dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
     "web:unit": "jest --config test/unit/jest.conf.js --coverage",
     "web:e2e": "node test/e2e/runner.js",
     "web:test": "npm run web:unit && npm run web:e2e",
-    "web:lint": "eslint --ext .js,.vue src test/unit test/e2e/specs",
     "web:build": "node build/build.js",
     "http:dev": "node http/index.js",
     "http:prod": "export NODE_ENV=production && node http/index.js",
